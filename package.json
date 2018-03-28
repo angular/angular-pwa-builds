@@ -1,0 +1,37 @@
+{
+  "name": "@angular/pwa",
+  "version": "0.0.0",
+  "description": "PWA schematics for Angular",
+  "keywords": [
+    "angular",
+    "devkit",
+    "sdk",
+    "Angular DevKit",
+    "blueprints",
+    "code generation",
+    "schematics"
+  ],
+  "schematics": "./collection.json",
+  "dependencies": {
+    "@schematics/angular": "github:angular/schematics-angular-builds#ad9c073f",
+    "typescript": "~2.6.2"
+  },
+  "peerDependencies": {
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#ad9c073f",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#ad9c073f"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular/devkit.git"
+  },
+  "engines": {
+    "node": ">= 8.9.0",
+    "npm": ">= 5.5.1"
+  },
+  "author": "Angular Authors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/devkit/issues"
+  },
+  "homepage": "https://github.com/angular/devkit"
+}
