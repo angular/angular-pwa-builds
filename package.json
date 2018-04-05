@@ -13,12 +13,12 @@
   ],
   "schematics": "./collection.json",
   "dependencies": {
-    "@schematics/angular": "github:angular/schematics-angular-builds#f3ee725",
+    "@schematics/angular": "github:angular/schematics-angular-builds#b6906c8",
     "typescript": "~2.6.2"
   },
   "peerDependencies": {
-    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#f3ee725",
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#f3ee725"
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#b6906c8",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#b6906c8"
   },
   "repository": {
     "type": "git",
