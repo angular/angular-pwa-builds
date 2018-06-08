@@ -4,6 +4,7 @@
   "description": "PWA schematics for Angular",
   "keywords": [
     "angular",
+    "Angular CLI",
     "devkit",
     "sdk",
     "Angular DevKit",
@@ -13,14 +14,14 @@
   ],
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#139a4fd",
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#139a4fd",
-    "@schematics/angular": "github:angular/schematics-angular-builds#139a4fd",
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#abc62ed",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#abc62ed",
+    "@schematics/angular": "github:angular/schematics-angular-builds#abc62ed",
     "typescript": "~2.6.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/angular/devkit.git"
+    "url": "https://github.com/angular/angular-cli.git"
   },
   "engines": {
     "node": ">= 8.9.0",
@@ -29,7 +30,7 @@
   "author": "Angular Authors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/angular/devkit/issues"
+    "url": "https://github.com/angular/angular-cli/issues"
   },
-  "homepage": "https://github.com/angular/devkit"
+  "homepage": "https://github.com/angular/angular-cli"
 }
