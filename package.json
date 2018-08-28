@@ -14,9 +14,9 @@
   ],
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#3f94b2d",
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#3f94b2d",
-    "@schematics/angular": "github:angular/schematics-angular-builds#3f94b2d",
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#7f67c64",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#7f67c64",
+    "@schematics/angular": "github:angular/schematics-angular-builds#7f67c64",
     "typescript": "~2.6.2"
   },
   "repository": {
