@@ -14,9 +14,9 @@
   ],
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#733efe7",
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#733efe7",
-    "@schematics/angular": "github:angular/schematics-angular-builds#733efe7",
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#b5a5e99",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#b5a5e99",
+    "@schematics/angular": "github:angular/schematics-angular-builds#b5a5e99",
     "parse5-html-rewriting-stream": "5.1.0",
     "rxjs": "6.3.3"
   },
