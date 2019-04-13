@@ -146,15 +146,15 @@ function default_1(options) {
         const sourcePath = core_1.join(core_1.normalize(project.root), 'src');
         const assetsPath = core_1.join(sourcePath, 'assets');
         const rootTemplateSource = schematics_1.apply(schematics_1.url('./files/root'), [
-            schematics_1.template(Object.assign({}, options)),
+            schematics_1.template({ ...options }),
             schematics_1.move(core_1.getSystemPath(sourcePath)),
         ]);
         const assetsTemplateSource = schematics_1.apply(schematics_1.url('./files/assets'), [
-            schematics_1.template(Object.assign({}, options)),
+            schematics_1.template({ ...options }),
             schematics_1.move(core_1.getSystemPath(assetsPath)),
         ]);
         // Setup service worker schematic options
-        const swOptions = Object.assign({}, options);
+        const swOptions = { ...options };
         delete swOptions.title;
         // Chain the rules and return
         return schematics_1.chain([
