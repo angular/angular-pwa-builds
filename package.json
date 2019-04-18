@@ -1,6 +1,6 @@
 {
   "name": "@angular/pwa",
-  "version": "0.800.0-beta.15+35.407d1d5",
+  "version": "0.800.0-beta.15+33.9ce2608",
   "description": "PWA schematics for Angular",
   "experimental": true,
   "keywords": [
@@ -15,9 +15,9 @@
   ],
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#407d1d5",
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#407d1d5",
-    "@schematics/angular": "github:angular/schematics-angular-builds#407d1d5",
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#9ce2608",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#9ce2608",
+    "@schematics/angular": "github:angular/schematics-angular-builds#9ce2608",
     "parse5-html-rewriting-stream": "5.1.0",
     "rxjs": "6.4.0"
   },
