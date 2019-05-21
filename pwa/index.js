@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 */
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
-const rxjs_1 = require("rxjs");
 const stream_1 = require("stream");
 const RewritingStream = require('parse5-html-rewriting-stream');
 function getWorkspace(host) {
@@ -49,7 +48,7 @@ function updateIndexFile(path) {
             }
             rewriter.emitEndTag(endTag);
         });
-        return new rxjs_1.Observable(obs => {
+        return new Promise(resolve => {
             const input = new stream_1.Readable({
                 encoding: 'utf8',
                 read() {
@@ -67,8 +66,7 @@ function updateIndexFile(path) {
                     const full = Buffer.concat(chunks);
                     host.overwrite(path, full.toString());
                     callback();
-                    obs.next(host);
-                    obs.complete();
+                    resolve();
                 },
             });
             input.pipe(rewriter).pipe(output);
@@ -76,7 +74,7 @@ function updateIndexFile(path) {
     };
 }
 function default_1(options) {
-    return (host, context) => {
+    return (host) => {
         if (!options.title) {
             options.title = options.project;
         }
@@ -162,7 +160,7 @@ function default_1(options) {
             schematics_1.mergeWith(rootTemplateSource),
             schematics_1.mergeWith(assetsTemplateSource),
             ...[...indexFiles].map(path => updateIndexFile(path)),
-        ])(host, context);
+        ]);
     };
 }
 exports.default = default_1;
