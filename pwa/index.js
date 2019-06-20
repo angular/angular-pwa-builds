@@ -1,29 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
-* @license
-* Copyright Google Inc. All Rights Reserved.
-*
-* Use of this source code is governed by an MIT-style license that can be
-* found in the LICENSE file at https://angular.io/license
-*/
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const stream_1 = require("stream");
 const RewritingStream = require('parse5-html-rewriting-stream');
-function getWorkspace(host) {
-    const possibleFiles = ['/angular.json', '/.angular.json'];
-    const path = possibleFiles.filter(path => host.exists(path))[0];
-    const configBuffer = host.read(path);
-    if (configBuffer === null) {
-        throw new schematics_1.SchematicsException(`Could not find (${path})`);
-    }
-    const content = configBuffer.toString();
-    return {
-        path,
-        workspace: core_1.parseJson(content, core_1.JsonParseMode.Loose),
-    };
-}
 function updateIndexFile(path) {
     return (host) => {
         const buffer = host.read(path);
@@ -74,33 +61,30 @@ function updateIndexFile(path) {
     };
 }
 function default_1(options) {
-    return (host) => {
+    return async (host) => {
         if (!options.title) {
             options.title = options.project;
         }
-        const { path: workspacePath, workspace } = getWorkspace(host);
+        // Keep Bazel from failing due to deep import
+        const { getWorkspace, updateWorkspace } = require('@schematics/angular/utility/workspace');
+        const workspace = await getWorkspace(host);
         if (!options.project) {
             throw new schematics_1.SchematicsException('Option "project" is required.');
         }
-        const project = workspace.projects[options.project];
+        const project = workspace.projects.get(options.project);
         if (!project) {
             throw new schematics_1.SchematicsException(`Project is not defined in this workspace.`);
         }
-        if (project.projectType !== 'application') {
+        if (project.extensions['projectType'] !== 'application') {
             throw new schematics_1.SchematicsException(`PWA requires a project type of "application".`);
         }
         // Find all the relevant targets for the project
-        const projectTargets = project.targets || project.architect;
-        if (!projectTargets || Object.keys(projectTargets).length === 0) {
+        if (project.targets.size === 0) {
             throw new schematics_1.SchematicsException(`Targets are not defined for this project.`);
         }
         const buildTargets = [];
         const testTargets = [];
-        for (const targetName in projectTargets) {
-            const target = projectTargets[targetName];
-            if (!target) {
-                continue;
-            }
+        for (const target of project.targets.values()) {
             if (target.builder === '@angular-devkit/build-angular:browser') {
                 buildTargets.push(target);
             }
@@ -112,7 +96,7 @@ function default_1(options) {
         const assetEntry = core_1.join(core_1.normalize(project.root), 'src', 'manifest.webmanifest');
         for (const target of [...buildTargets, ...testTargets]) {
             if (target.options) {
-                if (target.options.assets) {
+                if (Array.isArray(target.options.assets)) {
                     target.options.assets.push(assetEntry);
                 }
                 else {
@@ -123,11 +107,10 @@ function default_1(options) {
                 target.options = { assets: [assetEntry] };
             }
         }
-        host.overwrite(workspacePath, JSON.stringify(workspace, null, 2));
         // Find all index.html files in build targets
         const indexFiles = new Set();
         for (const target of buildTargets) {
-            if (target.options && target.options.index) {
+            if (target.options && typeof target.options.index === 'string') {
                 indexFiles.add(target.options.index);
             }
             if (!target.configurations) {
@@ -135,7 +118,7 @@ function default_1(options) {
             }
             for (const configName in target.configurations) {
                 const configuration = target.configurations[configName];
-                if (configuration && configuration.index) {
+                if (configuration && typeof configuration.index === 'string') {
                     indexFiles.add(configuration.index);
                 }
             }
@@ -156,6 +139,7 @@ function default_1(options) {
         delete swOptions.title;
         // Chain the rules and return
         return schematics_1.chain([
+            updateWorkspace(workspace),
             schematics_1.externalSchematic('@schematics/angular', 'service-worker', swOptions),
             schematics_1.mergeWith(rootTemplateSource),
             schematics_1.mergeWith(assetsTemplateSource),
