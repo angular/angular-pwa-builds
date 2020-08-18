@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
-const workspace_1 = require("@schematics/angular/utility/workspace");
 const stream_1 = require("stream");
 const RewritingStream = require('parse5-html-rewriting-stream');
 function updateIndexFile(path) {
@@ -63,11 +62,12 @@ function updateIndexFile(path) {
 }
 function default_1(options) {
     return async (host) => {
-        var _a, _b;
         if (!options.title) {
             options.title = options.project;
         }
-        const workspace = await workspace_1.getWorkspace(host);
+        // Keep Bazel from failing due to deep import
+        const { getWorkspace, updateWorkspace } = require('@schematics/angular/utility/workspace');
+        const workspace = await getWorkspace(host);
         if (!options.project) {
             throw new schematics_1.SchematicsException('Option "project" is required.');
         }
@@ -110,33 +110,39 @@ function default_1(options) {
         // Find all index.html files in build targets
         const indexFiles = new Set();
         for (const target of buildTargets) {
-            if (typeof ((_a = target.options) === null || _a === void 0 ? void 0 : _a.index) === 'string') {
+            if (target.options && typeof target.options.index === 'string') {
                 indexFiles.add(target.options.index);
             }
             if (!target.configurations) {
                 continue;
             }
-            for (const options of Object.values(target.configurations)) {
-                if (typeof (options === null || options === void 0 ? void 0 : options.index) === 'string') {
-                    indexFiles.add(options.index);
+            for (const configName in target.configurations) {
+                const configuration = target.configurations[configName];
+                if (configuration && typeof configuration.index === 'string') {
+                    indexFiles.add(configuration.index);
                 }
             }
         }
         // Setup sources for the assets files to add to the project
-        const sourcePath = core_1.normalize((_b = project.sourceRoot) !== null && _b !== void 0 ? _b : 'src');
+        const sourcePath = core_1.join(core_1.normalize(project.root), 'src');
+        const assetsPath = core_1.join(sourcePath, 'assets');
+        const rootTemplateSource = schematics_1.apply(schematics_1.url('./files/root'), [
+            schematics_1.template({ ...options }),
+            schematics_1.move(core_1.getSystemPath(sourcePath)),
+        ]);
+        const assetsTemplateSource = schematics_1.apply(schematics_1.url('./files/assets'), [
+            schematics_1.template({ ...options }),
+            schematics_1.move(core_1.getSystemPath(assetsPath)),
+        ]);
         // Setup service worker schematic options
-        const { title, ...swOptions } = options;
+        const swOptions = { ...options };
+        delete swOptions.title;
+        // Chain the rules and return
         return schematics_1.chain([
-            workspace_1.updateWorkspace(workspace),
+            updateWorkspace(workspace),
             schematics_1.externalSchematic('@schematics/angular', 'service-worker', swOptions),
-            schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/root'), [
-                schematics_1.template({ ...options }),
-                schematics_1.move(sourcePath),
-            ])),
-            schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/assets'), [
-                schematics_1.template({ ...options }),
-                schematics_1.move(core_1.join(sourcePath, 'assets')),
-            ])),
+            schematics_1.mergeWith(rootTemplateSource),
+            schematics_1.mergeWith(assetsTemplateSource),
             ...[...indexFiles].map(path => updateIndexFile(path)),
         ]);
     };
