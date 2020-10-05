@@ -11,22 +11,21 @@ const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const workspace_1 = require("@schematics/angular/utility/workspace");
 const stream_1 = require("stream");
-const RewritingStream = require('parse5-html-rewriting-stream');
 function updateIndexFile(path) {
-    return (host) => {
+    return async (host) => {
         const buffer = host.read(path);
         if (buffer === null) {
             throw new schematics_1.SchematicsException(`Could not read index file: ${path}`);
         }
-        const rewriter = new RewritingStream();
+        const rewriter = new (await Promise.resolve().then(() => require('parse5-html-rewriting-stream')))();
         let needsNoScript = true;
-        rewriter.on('startTag', (startTag) => {
+        rewriter.on('startTag', startTag => {
             if (startTag.tagName === 'noscript') {
                 needsNoScript = false;
             }
             rewriter.emitStartTag(startTag);
         });
-        rewriter.on('endTag', (endTag) => {
+        rewriter.on('endTag', endTag => {
             if (endTag.tagName === 'head') {
                 rewriter.emitRaw('  <link rel="manifest" href="manifest.webmanifest">\n');
                 rewriter.emitRaw('  <meta name="theme-color" content="#1976d2">\n');
