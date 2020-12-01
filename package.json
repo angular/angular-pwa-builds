@@ -1,6 +1,6 @@
 {
   "name": "@angular/pwa",
-  "version": "0.1101.0-next.0+50.b07fc6f",
+  "version": "0.1101.0-next.0+19.535a507",
   "description": "PWA schematics for Angular",
   "experimental": true,
   "keywords": [
@@ -18,9 +18,9 @@
     "save": false
   },
   "dependencies": {
-    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#b07fc6faf",
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#b07fc6faf",
-    "@schematics/angular": "github:angular/schematics-angular-builds#b07fc6faf",
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#535a5076d",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#535a5076d",
+    "@schematics/angular": "github:angular/schematics-angular-builds#535a5076d",
     "parse5-html-rewriting-stream": "6.0.1"
   },
   "repository": {
@@ -37,5 +37,11 @@
   "bugs": {
     "url": "https://github.com/angular/angular-cli/issues"
   },
-  "homepage": "https://github.com/angular/angular-cli"
+  "homepage": "https://github.com/angular/angular-cli",
+  "husky": {
+    "hooks": {
+      "commit-msg": "yarn -s ng-dev commit-message pre-commit-validate --file-env-variable HUSKY_GIT_PARAMS",
+      "prepare-commit-msg": "yarn -s ng-dev commit-message restore-commit-message-draft --file-env-variable HUSKY_GIT_PARAMS"
+    }
+  }
 }
