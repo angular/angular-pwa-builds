@@ -1,6 +1,6 @@
 {
   "name": "@angular/pwa",
-  "version": "0.1102.0-next.0+9.b5c309a",
+  "version": "0.1102.0-next.0+12.86d69e2",
   "description": "PWA schematics for Angular",
   "experimental": true,
   "keywords": [
@@ -18,9 +18,9 @@
     "save": false
   },
   "dependencies": {
-    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#b5c309ada",
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#b5c309ada",
-    "@schematics/angular": "github:angular/schematics-angular-builds#b5c309ada",
+    "@angular-devkit/core": "github:angular/angular-devkit-core-builds#86d69e22f",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#86d69e22f",
+    "@schematics/angular": "github:angular/schematics-angular-builds#86d69e22f",
     "parse5-html-rewriting-stream": "6.0.1"
   },
   "repository": {
