@@ -7,9 +7,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const workspace_1 = require("@schematics/angular/utility/workspace");
+const path_1 = require("path");
 const stream_1 = require("stream");
 function updateIndexFile(path) {
     return async (host) => {
@@ -62,7 +62,7 @@ function updateIndexFile(path) {
 }
 function default_1(options) {
     return async (host) => {
-        var _a, _b;
+        var _a, _b, _c;
         if (!options.title) {
             options.title = options.project;
         }
@@ -92,7 +92,7 @@ function default_1(options) {
             }
         }
         // Add manifest to asset configuration
-        const assetEntry = core_1.join(core_1.normalize(project.root), 'src', 'manifest.webmanifest');
+        const assetEntry = path_1.posix.join((_a = project.sourceRoot) !== null && _a !== void 0 ? _a : path_1.posix.join(project.root, 'src'), 'manifest.webmanifest');
         for (const target of [...buildTargets, ...testTargets]) {
             if (target.options) {
                 if (Array.isArray(target.options.assets)) {
@@ -109,7 +109,7 @@ function default_1(options) {
         // Find all index.html files in build targets
         const indexFiles = new Set();
         for (const target of buildTargets) {
-            if (typeof ((_a = target.options) === null || _a === void 0 ? void 0 : _a.index) === 'string') {
+            if (typeof ((_b = target.options) === null || _b === void 0 ? void 0 : _b.index) === 'string') {
                 indexFiles.add(target.options.index);
             }
             if (!target.configurations) {
@@ -122,7 +122,7 @@ function default_1(options) {
             }
         }
         // Setup sources for the assets files to add to the project
-        const sourcePath = core_1.normalize((_b = project.sourceRoot) !== null && _b !== void 0 ? _b : 'src');
+        const sourcePath = (_c = project.sourceRoot) !== null && _c !== void 0 ? _c : path_1.posix.join(project.root, 'src');
         // Setup service worker schematic options
         const { title, ...swOptions } = options;
         return schematics_1.chain([
@@ -134,7 +134,7 @@ function default_1(options) {
             ])),
             schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/assets'), [
                 schematics_1.template({ ...options }),
-                schematics_1.move(core_1.join(sourcePath, 'assets')),
+                schematics_1.move(path_1.posix.join(sourcePath, 'assets')),
             ])),
             ...[...indexFiles].map(path => updateIndexFile(path)),
         ]);
