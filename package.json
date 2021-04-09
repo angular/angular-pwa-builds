@@ -17,8 +17,8 @@
     "save": false
   },
   "dependencies": {
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#934753c33",
-    "@schematics/angular": "github:angular/schematics-angular-builds#934753c33",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#b6abef1ec",
+    "@schematics/angular": "github:angular/schematics-angular-builds#b6abef1ec",
     "parse5-html-rewriting-stream": "6.0.1"
   },
   "repository": {
