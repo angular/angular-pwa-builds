@@ -19,13 +19,13 @@ function updateIndexFile(path) {
         }
         const rewriter = new (await Promise.resolve().then(() => require('parse5-html-rewriting-stream')))();
         let needsNoScript = true;
-        rewriter.on('startTag', startTag => {
+        rewriter.on('startTag', (startTag) => {
             if (startTag.tagName === 'noscript') {
                 needsNoScript = false;
             }
             rewriter.emitStartTag(startTag);
         });
-        rewriter.on('endTag', endTag => {
+        rewriter.on('endTag', (endTag) => {
             if (endTag.tagName === 'head') {
                 rewriter.emitRaw('  <link rel="manifest" href="manifest.webmanifest">\n');
                 rewriter.emitRaw('  <meta name="theme-color" content="#1976d2">\n');
@@ -35,7 +35,7 @@ function updateIndexFile(path) {
             }
             rewriter.emitEndTag(endTag);
         });
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             const input = new stream_1.Readable({
                 encoding: 'utf8',
                 read() {
@@ -128,15 +128,12 @@ function default_1(options) {
         return schematics_1.chain([
             workspace_1.updateWorkspace(workspace),
             schematics_1.externalSchematic('@schematics/angular', 'service-worker', swOptions),
-            schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/root'), [
-                schematics_1.template({ ...options }),
-                schematics_1.move(sourcePath),
-            ])),
+            schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/root'), [schematics_1.template({ ...options }), schematics_1.move(sourcePath)])),
             schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/assets'), [
                 schematics_1.template({ ...options }),
                 schematics_1.move(path_1.posix.join(sourcePath, 'assets')),
             ])),
-            ...[...indexFiles].map(path => updateIndexFile(path)),
+            ...[...indexFiles].map((path) => updateIndexFile(path)),
         ]);
     };
 }
