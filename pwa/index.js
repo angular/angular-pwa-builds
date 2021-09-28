@@ -85,7 +85,7 @@ function default_1(options) {
         if (!options.title) {
             options.title = options.project;
         }
-        const workspace = await workspace_1.getWorkspace(host);
+        const workspace = await (0, workspace_1.getWorkspace)(host);
         if (!options.project) {
             throw new schematics_1.SchematicsException('Option "project" is required.');
         }
@@ -144,13 +144,13 @@ function default_1(options) {
         const sourcePath = (_c = project.sourceRoot) !== null && _c !== void 0 ? _c : path_1.posix.join(project.root, 'src');
         // Setup service worker schematic options
         const { title, ...swOptions } = options;
-        return schematics_1.chain([
-            workspace_1.updateWorkspace(workspace),
-            schematics_1.externalSchematic('@schematics/angular', 'service-worker', swOptions),
-            schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/root'), [schematics_1.template({ ...options }), schematics_1.move(sourcePath)])),
-            schematics_1.mergeWith(schematics_1.apply(schematics_1.url('./files/assets'), [
-                schematics_1.template({ ...options }),
-                schematics_1.move(path_1.posix.join(sourcePath, 'assets')),
+        return (0, schematics_1.chain)([
+            (0, workspace_1.updateWorkspace)(workspace),
+            (0, schematics_1.externalSchematic)('@schematics/angular', 'service-worker', swOptions),
+            (0, schematics_1.mergeWith)((0, schematics_1.apply)((0, schematics_1.url)('./files/root'), [(0, schematics_1.template)({ ...options }), (0, schematics_1.move)(sourcePath)])),
+            (0, schematics_1.mergeWith)((0, schematics_1.apply)((0, schematics_1.url)('./files/assets'), [
+                (0, schematics_1.template)({ ...options }),
+                (0, schematics_1.move)(path_1.posix.join(sourcePath, 'assets')),
             ])),
             ...[...indexFiles].map((path) => updateIndexFile(path)),
         ]);
