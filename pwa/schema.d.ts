@@ -11,4 +11,5 @@ export interface Schema {
      * The title of the application.
      */
     title?: string;
+    [property: string]: any;
 }
