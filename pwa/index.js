@@ -11,12 +11,10 @@ const schematics_1 = require("@angular-devkit/schematics");
 const utility_1 = require("@schematics/angular/utility");
 const path_1 = require("path");
 const stream_1 = require("stream");
+const promises_1 = require("stream/promises");
 function updateIndexFile(path) {
     return async (host) => {
-        const buffer = host.read(path);
-        if (buffer === null) {
-            throw new schematics_1.SchematicsException(`Could not read index file: ${path}`);
-        }
+        const originalContent = host.readText(path);
         const { RewritingStream } = await loadEsmModule('parse5-html-rewriting-stream');
         const rewriter = new RewritingStream();
         let needsNoScript = true;
@@ -36,28 +34,12 @@ function updateIndexFile(path) {
             }
             rewriter.emitEndTag(endTag);
         });
-        return new Promise((resolve) => {
-            const input = new stream_1.Readable({
-                encoding: 'utf8',
-                read() {
-                    this.push(buffer);
-                    this.push(null);
-                },
-            });
+        return (0, promises_1.pipeline)(stream_1.Readable.from(originalContent), rewriter, async function (source) {
             const chunks = [];
-            const output = new stream_1.Writable({
-                write(chunk, encoding, callback) {
-                    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk, encoding) : chunk);
-                    callback();
-                },
-                final(callback) {
-                    const full = Buffer.concat(chunks);
-                    host.overwrite(path, full.toString());
-                    callback();
-                    resolve();
-                },
-            });
-            input.pipe(rewriter).pipe(output);
+            for await (const chunk of source) {
+                chunks.push(Buffer.from(chunk));
+            }
+            host.overwrite(path, Buffer.concat(chunks));
         });
     };
 }
