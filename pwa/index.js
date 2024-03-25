@@ -74,21 +74,6 @@ function default_1(options) {
                 testTargets.push(target);
             }
         }
-        // Add manifest to asset configuration
-        const assetEntry = path_1.posix.join(project.sourceRoot ?? path_1.posix.join(project.root, 'src'), 'manifest.webmanifest');
-        for (const target of [...buildTargets, ...testTargets]) {
-            if (target.options) {
-                if (Array.isArray(target.options.assets)) {
-                    target.options.assets.push(assetEntry);
-                }
-                else {
-                    target.options.assets = [assetEntry];
-                }
-            }
-            else {
-                target.options = { assets: [assetEntry] };
-            }
-        }
         // Find all index.html files in build targets
         const indexFiles = new Set();
         for (const target of buildTargets) {
@@ -109,10 +94,30 @@ function default_1(options) {
         // Setup service worker schematic options
         const { title, ...swOptions } = options;
         await (0, utility_1.writeWorkspace)(host, workspace);
+        let assetsDir = path_1.posix.join(sourcePath, 'assets');
+        if (host.exists(assetsDir)) {
+            // Add manifest to asset configuration
+            const assetEntry = path_1.posix.join(project.sourceRoot ?? path_1.posix.join(project.root, 'src'), 'manifest.webmanifest');
+            for (const target of [...buildTargets, ...testTargets]) {
+                if (target.options) {
+                    if (Array.isArray(target.options.assets)) {
+                        target.options.assets.push(assetEntry);
+                    }
+                    else {
+                        target.options.assets = [assetEntry];
+                    }
+                }
+                else {
+                    target.options = { assets: [assetEntry] };
+                }
+            }
+        }
+        else {
+            assetsDir = path_1.posix.join(project.root, 'public');
+        }
         return (0, schematics_1.chain)([
             (0, schematics_1.externalSchematic)('@schematics/angular', 'service-worker', swOptions),
-            (0, schematics_1.mergeWith)((0, schematics_1.apply)((0, schematics_1.url)('./files/root'), [(0, schematics_1.template)({ ...options }), (0, schematics_1.move)(sourcePath)])),
-            (0, schematics_1.mergeWith)((0, schematics_1.apply)((0, schematics_1.url)('./files/assets'), [(0, schematics_1.move)(path_1.posix.join(sourcePath, 'assets'))])),
+            (0, schematics_1.mergeWith)((0, schematics_1.apply)((0, schematics_1.url)('./files/assets'), [(0, schematics_1.template)({ ...options }), (0, schematics_1.move)(assetsDir)])),
             ...[...indexFiles].map((path) => updateIndexFile(path)),
         ]);
     };
