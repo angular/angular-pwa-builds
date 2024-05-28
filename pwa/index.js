@@ -95,6 +95,7 @@ function default_1(options) {
         const { title, ...swOptions } = options;
         await (0, utility_1.writeWorkspace)(host, workspace);
         let assetsDir = path_1.posix.join(sourcePath, 'assets');
+        let iconsPath;
         if (host.exists(assetsDir)) {
             // Add manifest to asset configuration
             const assetEntry = path_1.posix.join(project.sourceRoot ?? path_1.posix.join(project.root, 'src'), 'manifest.webmanifest');
@@ -111,13 +112,15 @@ function default_1(options) {
                     target.options = { assets: [assetEntry] };
                 }
             }
+            iconsPath = 'assets';
         }
         else {
             assetsDir = path_1.posix.join(project.root, 'public');
+            iconsPath = 'icons';
         }
         return (0, schematics_1.chain)([
             (0, schematics_1.externalSchematic)('@schematics/angular', 'service-worker', swOptions),
-            (0, schematics_1.mergeWith)((0, schematics_1.apply)((0, schematics_1.url)('./files/assets'), [(0, schematics_1.template)({ ...options }), (0, schematics_1.move)(assetsDir)])),
+            (0, schematics_1.mergeWith)((0, schematics_1.apply)((0, schematics_1.url)('./files/assets'), [(0, schematics_1.template)({ ...options, iconsPath }), (0, schematics_1.move)(assetsDir)])),
             ...[...indexFiles].map((path) => updateIndexFile(path)),
         ]);
     };
