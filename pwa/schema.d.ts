@@ -4,7 +4,7 @@
  * access it offline. This schematic configures your project for PWA functionality, adding a
  * service worker, a web app manifest, and other necessary features.
  */
-export interface Schema {
+export type Schema = {
     /**
      * The name of the project to transform into a PWA. If not specified, the CLI will determine
      * the project from the current directory.
@@ -21,4 +21,4 @@ export interface Schema {
      */
     title?: string;
     [property: string]: any;
-}
+};
