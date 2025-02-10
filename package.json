@@ -1,6 +1,6 @@
 {
   "name": "@angular/pwa",
-  "version": "19.2.0-next.1+sha-b553069",
+  "version": "19.2.0-next.1+sha-833dc98",
   "description": "PWA schematics for Angular",
   "keywords": [
     "Angular CLI",
@@ -17,15 +17,15 @@
     "save": false
   },
   "dependencies": {
-    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#b553069",
-    "@schematics/angular": "github:angular/schematics-angular-builds#b553069",
+    "@angular-devkit/schematics": "github:angular/angular-devkit-schematics-builds#833dc98",
+    "@schematics/angular": "github:angular/schematics-angular-builds#833dc98",
     "parse5-html-rewriting-stream": "7.0.0"
   },
   "peerDependencies": {
-    "@angular/cli": "github:angular/cli-builds#b553069"
+    "@angular/cli": "github:angular/cli-builds#833dc98"
   },
   "peerDependenciesMeta": {
-    "@angular/cli": "github:angular/cli-builds#b553069"
+    "@angular/cli": "github:angular/cli-builds#833dc98"
   },
   "repository": {
     "type": "git",
