@@ -10,9 +10,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 const schematics_1 = require("@angular-devkit/schematics");
 const utility_1 = require("@schematics/angular/utility");
-const path_1 = require("path");
-const stream_1 = require("stream");
-const promises_1 = require("stream/promises");
+const node_path_1 = require("node:path");
+const node_stream_1 = require("node:stream");
+const promises_1 = require("node:stream/promises");
 function updateIndexFile(path) {
     return async (host) => {
         const originalContent = host.readText(path);
@@ -35,7 +35,7 @@ function updateIndexFile(path) {
             }
             rewriter.emitEndTag(endTag);
         });
-        return (0, promises_1.pipeline)(stream_1.Readable.from(originalContent), rewriter, async function (source) {
+        return (0, promises_1.pipeline)(node_stream_1.Readable.from(originalContent), rewriter, async function (source) {
             const chunks = [];
             for await (const chunk of source) {
                 chunks.push(Buffer.from(chunk));
@@ -91,15 +91,15 @@ function default_1(options) {
             }
         }
         // Setup sources for the assets files to add to the project
-        const sourcePath = project.sourceRoot ?? path_1.posix.join(project.root, 'src');
+        const sourcePath = project.sourceRoot ?? node_path_1.posix.join(project.root, 'src');
         // Setup service worker schematic options
         const { title, ...swOptions } = options;
         await (0, utility_1.writeWorkspace)(host, workspace);
-        let assetsDir = path_1.posix.join(sourcePath, 'assets');
+        let assetsDir = node_path_1.posix.join(sourcePath, 'assets');
         let iconsPath;
         if (host.exists(assetsDir)) {
             // Add manifest to asset configuration
-            const assetEntry = path_1.posix.join(project.sourceRoot ?? path_1.posix.join(project.root, 'src'), 'manifest.webmanifest');
+            const assetEntry = node_path_1.posix.join(project.sourceRoot ?? node_path_1.posix.join(project.root, 'src'), 'manifest.webmanifest');
             for (const target of [...buildTargets, ...testTargets]) {
                 if (target.options) {
                     if (Array.isArray(target.options.assets)) {
@@ -116,7 +116,7 @@ function default_1(options) {
             iconsPath = 'assets';
         }
         else {
-            assetsDir = path_1.posix.join(project.root, 'public');
+            assetsDir = node_path_1.posix.join(project.root, 'public');
             iconsPath = 'icons';
         }
         return (0, schematics_1.chain)([
