@@ -1,6 +1,6 @@
 {
   "name": "@angular/pwa",
-  "version": "20.0.0-next.8+sha-95554fd",
+  "version": "20.0.0-next.8+sha-9fe16ce",
   "description": "PWA schematics for Angular",
   "keywords": [
     "Angular CLI",
