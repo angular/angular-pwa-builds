@@ -156,3 +156,4 @@ function default_1(options) {
 function loadEsmModule(modulePath) {
     return new Function('modulePath', `return import(modulePath);`)(modulePath);
 }
+//# sourceMappingURL=index.js.map
